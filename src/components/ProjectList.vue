@@ -19,7 +19,7 @@
         </div>
       </article>
     </div>
-    <div v-else class="empty-message">暂无项目数据</div>
+    <div v-else class="empty-message">{{ emptyMessage }}</div>
   </SectionCard>
 </template>
 
@@ -33,6 +33,10 @@ defineProps({
   projects: {
     type: Array,
     required: true
+  },
+  emptyMessage: {
+    type: String,
+    default: '暂无项目数据'
   }
 })
 </script>
