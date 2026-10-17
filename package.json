@@ -1,5 +1,5 @@
 {
-  "name": "01-vue-project",
+  "name": "01project",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -9,7 +9,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "vue": "^3.5.40"
+    "element-plus": "^2.14.7",
+    "pinia": "^4.0.3",
+    "vue": "^3.5.40",
+    "vue-router": "^4.6.4"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.8",
