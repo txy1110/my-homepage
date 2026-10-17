@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <title>购物车商品管理</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+
+<body>
+  <div id="app">
+    <button @click="addProduct">添加商品</button>
+
+    <!-- 购物车为空提示 -->
+    <div v-if="products.length === 0">购物车暂无商品</div>
+
+    <!-- v-for渲染商品列表 -->
+    <ul v-else>
+      <li v-for="item in products" :key="item.id">
+        {{ item.id }} - {{ item.name }} - {{ item.price }}元
+        <button @click="delProduct(item.id)">删除</button>
+      </li>
+    </ul>
+  </div>
+
+  <script>
+    const { createApp } = Vue
+    createApp({
+      data() {
+        return {
+          // 商品数组，id name price
+          products: [
+            { id: 1, name: '笔记本电脑', price: 4999 },
+            { id: 2, name: '无线鼠标', price: 99 }
+          ]
+        }
+      },
+      methods: {
+        // 添加商品，往数组末尾push
+        addProduct() {
+          const newId = Date.now() // 用时间戳做唯一id
+          this.products.push({
+            id: newId,
+            name: '新商品',
+            price: Math.floor(Math.random() * 1000)
+          })
+        },
+        // 根据id删除商品
+        delProduct(id) {
+          this.products = this.products.filter(p => p.id !== id)
+        }
+      }
+    }).mount('#app')
+  </script>
+</body>
+
+</html>
