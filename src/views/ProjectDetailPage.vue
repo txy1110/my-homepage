@@ -21,6 +21,7 @@
       </ul>
     </section>
   </article>
+  <section v-else class="page-surface"><h1>项目不存在</h1><RouterLink :to="{ name: 'projects' }">返回项目列表</RouterLink></section>
 </template>
 
 <script setup>
@@ -32,6 +33,7 @@ import { RouterLink } from 'vue-router'
 const props = defineProps({ id: { type: String, required: true } })
 const projectStore = useProjectStore()
 const articleStore = useArticleStore()
+// 详情和关联文章均从共享 Store 派生，避免重复请求同一项目数据。
 const project = computed(() => projectStore.getProjectById(props.id))
 const relatedArticles = computed(() => articleStore.getArticlesByProject(props.id))
 const statusClass = computed(() => ({ '进行中': 'running', '已完成': 'done', '规划中': 'planning' }[project.value?.status] || 'planning'))

@@ -27,8 +27,10 @@
 import SectionCard from './SectionCard.vue'
 import { RouterLink } from 'vue-router'
 
+// 状态文字与视觉样式保持一一映射，未知状态按规划中样式展示。
 const statusClass = (status) => ({ '进行中': 'running', '已完成': 'done', '规划中': 'planning' }[status] || 'planning')
 
+// 列表由父级传入，组件只负责展示并通过稳定项目 ID 构造详情链接。
 defineProps({
   projects: {
     type: Array,

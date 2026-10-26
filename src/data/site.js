@@ -1,3 +1,4 @@
+// 空数据库首次初始化时使用的主页资料；后续公开页面数据以 MySQL 内容为准。
 export const initialSiteContent = {
   userInfo: {
     name: '田兴亿',

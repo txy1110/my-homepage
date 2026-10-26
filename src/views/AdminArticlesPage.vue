@@ -94,6 +94,7 @@ const projectStore = useProjectStore()
 // 要求 2、3：文章管理页连接文章与项目 Store；storeToRefs 解构后仍保持响应式。
 const { articles } = storeToRefs(articleStore)
 const { projects } = storeToRefs(projectStore)
+// 新建文章以独立的未发布草稿初始化，避免弹窗沿用上次编辑内容。
 const blankArticle = () => ({
   id: '',
   title: '',
@@ -113,8 +114,10 @@ const rules = {
   content: [{ required: true, message: '请输入文章正文。', trigger: 'blur' }],
   createdAt: [{ required: true, message: '请选择发布日期。', trigger: 'change' }]
 }
+// 显示关联项目名称；文章允许不关联项目。
 const projectName = (projectId) => projects.value.find((project) => project.id === projectId)?.name || '未关联'
 
+// 初始化一个新的草稿文章，并默认设为未发布状态。
 function startNew() {
   isEditing.value = false
   Object.assign(draft, blankArticle())
@@ -127,17 +130,18 @@ function editArticle(article) {
   dialogVisible.value = true
 }
 
+// 新文章生成稳定的文章 ID；修改时保留现有 ID 并提交表单字段。
 function saveArticle() {
   // 要求 2、5：Element Plus 表单校验通过后调用 Store actions，新增或编辑文章并持久化。
-  formRef.value.validate((valid) => {
+  formRef.value.validate(async (valid) => {
     if (!valid) return
     const nextArticle = { ...draft, projectId: draft.projectId || '', id: isEditing.value ? draft.id : `article-${Date.now()}` }
     try {
       if (isEditing.value) {
-        articleStore.updateArticle(draft.id, nextArticle)
+        await articleStore.updateArticle(draft.id, nextArticle)
         ElMessage.success('文章修改已保存。')
       } else {
-        articleStore.addArticle(nextArticle)
+        await articleStore.addArticle(nextArticle)
         ElMessage.success('文章已新增。')
       }
       dialogVisible.value = false
@@ -147,6 +151,7 @@ function saveArticle() {
   })
 }
 
+// 删除文章前要求确认，避免误操作造成已发布内容丢失。
 async function removeArticle(article) {
   try {
     // 取消确认时不修改数据；确认后才调用删除 action。
@@ -155,7 +160,7 @@ async function removeArticle(article) {
       cancelButtonText: '取消',
       type: 'warning'
     })
-    articleStore.deleteArticle(article.id)
+    await articleStore.deleteArticle(article.id)
     ElMessage.success('文章已删除。')
   } catch (cause) {
     if (cause === 'cancel' || cause === 'close') return

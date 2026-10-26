@@ -36,10 +36,10 @@ import 'element-plus/theme-chalk/el-timeline.css'
 import 'element-plus/theme-chalk/el-timeline-item.css'
 
 const app = createApp(App)
-// 要求 1、3：先注册 Pinia，页面组件与路由守卫才能访问同一份 Store。
+// 先注册 Pinia，再注册路由，确保路由守卫执行时可以访问共享 Store。
 app.use(pinia).use(router)
 
-// 要求 5：全局注册项目中使用的 Element Plus 组件，所有页面模板均可直接使用。
+// 项目采用显式的按需组件清单，避免把 Element Plus 的全部组件都注册进应用。
 for (const component of [
   ElButton,
   ElCard,

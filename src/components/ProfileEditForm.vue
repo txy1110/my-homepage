@@ -71,15 +71,15 @@
 </template>
 
 <script setup>
-// defineProps：接收父组件的 userInfo
+// 表单展示当前资料作为提示，编辑值由父组件通过双向绑定维护。
 defineProps({
   userInfo: { type: Object, required: true }
 })
 
-// defineEmits：声明 save / cancel 事件
+// 将保存和取消动作上抛，由管理页面负责校验、持久化及提示反馈。
 defineEmits(['save', 'cancel'])
 
-// defineModel：与父组件双向绑定编辑数据与可见性
+// 编辑草稿和表单显隐都由父级控制，关闭或重置时可统一恢复状态。
 const editTemp = defineModel('editTemp', { type: Object, required: true })
 const visible = defineModel('visible', { type: Boolean, default: false })
 </script>

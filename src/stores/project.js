@@ -1,60 +1,90 @@
 import { defineStore } from 'pinia'
-import { initialSiteContent } from '../data/site.js'
-import { readStoredState, writeStoredState } from './persistence.js'
-
-const storageKey = 'personal-home-content'
-
-function loadContent() {
-  // 合并默认资料，兼容旧版本或只保存了部分字段的本地内容。
-  const saved = readStoredState(storageKey, null, (value) =>
-    value && typeof value === 'object' &&
-    value.userInfo && typeof value.userInfo === 'object' && !Array.isArray(value.userInfo) &&
-    Array.isArray(value.projects) && Array.isArray(value.skills)
-  )
-
-  return saved
-    ? { ...initialSiteContent, ...saved, userInfo: { ...initialSiteContent.userInfo, ...saved.userInfo } }
-    : structuredClone(initialSiteContent)
-}
+import { apiRequest } from '../services/api.js'
 
 export const useProjectStore = defineStore('projects', {
-  // 个人资料、技能和项目由同一 Store 维护，便于公开页和后台共享。
-  state: () => loadContent(),
+  state: () => ({
+    profileId: '',
+    userInfo: {},
+    avatarEmoji: '',
+    skills: [],
+    projects: [],
+    loaded: false
+  }),
   getters: {
+    // 项目数量和详情查询由当前 Store 状态即时派生。
     projectCount: (state) => state.projects.length,
     getProjectById: (state) => (id) => state.projects.find((project) => project.id === id)
   },
   actions: {
-    persist() {
-      // 只写入业务数据，避免把 Store 内部属性一并序列化。
-      writeStoredState(storageKey, {
-        userInfo: this.userInfo,
-        avatarEmoji: this.avatarEmoji,
-        skills: this.skills,
-        projects: this.projects
+    // 首屏并行读取资料、项目和技能，待请求全部成功后一次性更新 Store。
+    async load() {
+      const [profile, projects, skills] = await Promise.all([
+        apiRequest('/profile'),
+        apiRequest('/projects'),
+        apiRequest('/skills')
+      ])
+      this.profileId = String(profile.id)
+      this.userInfo = {
+        name: profile.name,
+        title: profile.title,
+        bio: profile.bio,
+        email: profile.email,
+        city: profile.city,
+        birthday: profile.birthday || '',
+        job: profile.job
+      }
+      this.avatarEmoji = profile.avatarEmoji
+      this.skills = skills.map((skill) => skill.name)
+      this.projects = projects
+      this.loaded = true
+    },
+    // 保存资料时连同技能清单一起提交，接口成功后再同步返回值。
+    async updateProfile({ userInfo, skills }) {
+      const profile = await apiRequest(`/profile/${this.profileId}`, {
+        method: 'PUT',
+        authenticated: true,
+        body: {
+          ...userInfo,
+          skills: [...new Set(skills)],
+          avatarEmoji: this.avatarEmoji
+        }
       })
+      this.userInfo = {
+        name: profile.name,
+        title: profile.title,
+        bio: profile.bio,
+        email: profile.email,
+        city: profile.city,
+        birthday: profile.birthday || '',
+        job: profile.job
+      }
+      this.skills = profile.skills
     },
-    updateProfile({ userInfo, skills }) {
-      this.userInfo = { ...this.userInfo, ...userInfo }
-      this.skills = [...new Set(skills)]
-      this.persist()
+    // 新建项目成功后立即置入列表，保持页面响应式状态与数据库一致。
+    async addProject(project) {
+      const saved = await apiRequest('/projects', {
+        method: 'POST',
+        authenticated: true,
+        body: { ...project, profileId: this.profileId }
+      })
+      this.projects.unshift(saved)
     },
-    addProject(project) {
-      if (this.getProjectById(project.id)) throw new Error('该项目编号已存在。')
-      this.projects.push({ ...project })
-      this.persist()
-    },
-    updateProject(id, changes) {
+    // 更新后以服务端结果替换 Store 条目，避免保留未规范化的表单值。
+    async updateProject(id, changes) {
+      const saved = await apiRequest(`/projects/${encodeURIComponent(id)}`, {
+        method: 'PUT',
+        authenticated: true,
+        body: { ...changes, profileId: this.profileId }
+      })
       const index = this.projects.findIndex((project) => project.id === id)
-      if (index === -1) throw new Error('找不到要修改的项目。')
-      this.projects.splice(index, 1, { ...changes })
-      this.persist()
+      if (index === -1) this.projects.unshift(saved)
+      else this.projects.splice(index, 1, saved)
     },
-    deleteProject(id) {
+    // 删除只在接口确认成功后才从本地列表移除。
+    async deleteProject(id) {
+      await apiRequest(`/projects/${encodeURIComponent(id)}`, { method: 'DELETE', authenticated: true })
       const index = this.projects.findIndex((project) => project.id === id)
-      if (index === -1) throw new Error('找不到要删除的项目。')
       this.projects.splice(index, 1)
-      this.persist()
     }
   }
 })

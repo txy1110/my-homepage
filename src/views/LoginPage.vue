@@ -15,7 +15,7 @@
           <input id="password" v-model="password" type="password" autocomplete="current-password" required>
         </div>
       </div>
-      <p class="demo-note">演示项目：输入任意非空用户名和密码即可登录。真实应用应接入服务端身份认证。</p>
+      <p class="demo-note">使用服务端配置的管理员用户名，以及 `server/.env` 中的管理令牌登录。</p>
       <p v-if="error" class="form-error" role="alert">{{ error }}</p>
       <div class="button-row">
         <button class="button primary" type="submit">登录管理后台</button>
@@ -36,10 +36,11 @@ const route = useRoute()
 const router = useRouter()
 const userStore = useUserStore()
 
-function login() {
+// 登录成功后只接受站内绝对路径作为重定向目标，避免开放重定向到外站。
+async function login() {
   error.value = ''
   try {
-    userStore.login(username.value, password.value)
+    await userStore.login(username.value, password.value)
     const redirect = typeof route.query.redirect === 'string' &&
       route.query.redirect.startsWith('/') && !route.query.redirect.startsWith('//')
       ? route.query.redirect

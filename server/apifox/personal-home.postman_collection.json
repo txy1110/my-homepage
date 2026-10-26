@@ -1,0 +1,704 @@
+{
+  "info": {
+    "_postman_id": "d928cbe8-b814-4cdb-bfd8-a8024be17e4a",
+    "name": "个人主页 API 接口测试",
+    "description": "可导入 Apifox 或 Postman。按顺序运行集合；先在本地环境填写管理员账号与密码。集合会创建临时项目、文章和技能并在末尾删除。",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000/api" },
+    { "key": "adminToken", "value": "" },
+    { "key": "profileId", "value": "" },
+    { "key": "testProfileId", "value": "" },
+    { "key": "projectId", "value": "" },
+    { "key": "articleId", "value": "" },
+    { "key": "skillId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "健康检查",
+      "request": { "method": "GET", "url": "{{baseUrl}}/health" },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "type": "text/javascript",
+          "exec": [
+            "pm.test('HTTP 200 and standard success envelope', function () {",
+            "  pm.response.to.have.status(200);",
+            "  const body = pm.response.json();",
+            "  pm.expect(body.success).to.eql(true);",
+            "  pm.expect(body.data.status).to.eql('ok');",
+            "});"
+          ]
+        }
+      }]
+    },
+    {
+      "name": "未登录写入应被拒绝",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\"id\":\"unauthorized-test\",\"profileId\":\"1\",\"name\":\"Unauthorized\",\"description\":\"Should be rejected\",\"status\":\"规划中\",\"tech\":\"test\",\"period\":\"test\"}", "options": { "raw": { "language": "json" } } },
+        "url": "{{baseUrl}}/projects"
+      },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "type": "text/javascript",
+          "exec": [
+            "pm.test('Unauthenticated write returns 401', function () {",
+            "  pm.response.to.have.status(401);",
+            "  const body = pm.response.json();",
+            "  pm.expect(body.success).to.eql(false);",
+            "  pm.expect(body.error.code).to.eql('UNAUTHORIZED');",
+            "});"
+          ]
+        }
+      }]
+    },
+    {
+      "name": "管理员登录",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\"username\":\"{{adminUsername}}\",\"password\":\"{{adminPassword}}\"}", "options": { "raw": { "language": "json" } } },
+        "url": "{{baseUrl}}/auth/login"
+      },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "type": "text/javascript",
+          "exec": [
+            "pm.test('Admin login returns a session token', function () {",
+            "  pm.response.to.have.status(200);",
+            "  const body = pm.response.json();",
+            "  pm.expect(body.success).to.eql(true);",
+            "  pm.expect(body.data.token).to.be.a('string').and.not.empty;",
+            "  pm.environment.set('adminToken', body.data.token);",
+            "});"
+          ]
+        }
+      }]
+    },
+    {
+      "name": "查询当前管理员",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+        "url": "{{baseUrl}}/auth/me"
+      },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "type": "text/javascript",
+          "exec": [
+            "pm.test('Session is authenticated', function () {",
+            "  pm.response.to.have.status(200);",
+            "  const body = pm.response.json();",
+            "  pm.expect(body.success).to.eql(true);",
+            "  pm.expect(body.data.username).to.eql(pm.environment.get('adminUsername'));",
+            "});"
+          ]
+        }
+      }]
+    },
+    {
+      "name": "查询个人资料与技能",
+      "request": { "method": "GET", "url": "{{baseUrl}}/profile" },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "type": "text/javascript",
+          "exec": [
+            "pm.test('Profile and skills are returned', function () {",
+            "  pm.response.to.have.status(200);",
+            "  const body = pm.response.json();",
+            "  pm.expect(body.success).to.eql(true);",
+            "  pm.expect(body.data.id).to.exist;",
+            "  pm.expect(body.data.skills).to.be.an('array');",
+            "  pm.environment.set('profileId', String(body.data.id));",
+            "});"
+          ]
+        }
+      }]
+    },
+    {
+      "name": "查询项目列表",
+      "request": { "method": "GET", "url": "{{baseUrl}}/projects" },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "type": "text/javascript",
+          "exec": [
+            "pm.test('Projects are returned in success envelope', function () {",
+            "  pm.response.to.have.status(200);",
+            "  const body = pm.response.json();",
+            "  pm.expect(body.success).to.eql(true);",
+            "  pm.expect(body.data).to.be.an('array');",
+          "});"
+          ]
+        }
+      }]
+    },
+    {
+      "name": "查询已发布文章",
+      "request": { "method": "GET", "url": "{{baseUrl}}/articles" },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "type": "text/javascript",
+          "exec": [
+            "pm.test('Public article list contains only published articles', function () {",
+            "  pm.response.to.have.status(200);",
+            "  const body = pm.response.json();",
+            "  pm.expect(body.success).to.eql(true);",
+            "  pm.expect(body.data).to.be.an('array');",
+            "  body.data.forEach(function (article) { pm.expect(article.published).to.eql(true); });",
+            "});"
+          ]
+        }
+      }]
+    },
+    {
+      "name": "查询技能列表",
+      "request": { "method": "GET", "url": "{{baseUrl}}/skills?profileId={{profileId}}" },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "type": "text/javascript",
+          "exec": [
+            "pm.test('Skills can be filtered by profile', function () {",
+            "  pm.response.to.have.status(200);",
+            "  const body = pm.response.json();",
+            "  pm.expect(body.success).to.eql(true);",
+            "  pm.expect(body.data).to.be.an('array');",
+            "  body.data.forEach(function (skill) { pm.expect(String(skill.profileId)).to.eql(pm.environment.get('profileId')); });",
+            "});"
+          ]
+        }
+      }]
+    },
+    {
+      "name": "个人资料 CRUD",
+      "item": [
+        {
+          "name": "创建临时个人资料",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"name\":\"Apifox 临时资料\",\"title\":\"接口测试\",\"bio\":\"临时数据，测试结束即删除。\",\"email\":\"apifox-test@example.com\",\"city\":\"测试城市\",\"birthday\":null,\"job\":\"测试\",\"avatarEmoji\":\"🧪\",\"skills\":[\"临时技能\"]}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/profile"
+          },
+          "event": [{
+            "listen": "test",
+            "script": {
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('Profile is created with its skills', function () {",
+                "  pm.response.to.have.status(201);",
+                "  const body = pm.response.json();",
+                "  pm.expect(body.success).to.eql(true);",
+                "  pm.expect(body.data.skills).to.include('临时技能');",
+                "  pm.environment.set('testProfileId', String(body.data.id));",
+                "});"
+              ]
+            }
+          }]
+        },
+        {
+          "name": "修改临时个人资料",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"name\":\"Apifox 临时资料（已修改）\",\"title\":\"接口测试更新\",\"bio\":\"验证个人资料更新和技能替换。\",\"email\":\"apifox-test@example.com\",\"city\":\"测试城市\",\"birthday\":null,\"job\":\"测试\",\"avatarEmoji\":\"🧪\",\"skills\":[\"更新后的临时技能\"]}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/profile/{{testProfileId}}"
+          },
+          "event": [{
+            "listen": "test",
+            "script": {
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('Profile and skills are updated', function () {",
+                "  pm.response.to.have.status(200);",
+                "  const body = pm.response.json();",
+                "  pm.expect(body.success).to.eql(true);",
+                "  pm.expect(body.data.name).to.include('已修改');",
+                "  pm.expect(body.data.skills).to.eql(['更新后的临时技能']);",
+                "});"
+              ]
+            }
+          }]
+        },
+        {
+          "name": "查询临时个人资料",
+          "request": { "method": "GET", "url": "{{baseUrl}}/profile/{{testProfileId}}" },
+          "event": [{
+            "listen": "test",
+            "script": {
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('Profile can be queried by ID', function () {",
+                "  pm.response.to.have.status(200);",
+                "  const body = pm.response.json();",
+                "  pm.expect(body.success).to.eql(true);",
+                "  pm.expect(String(body.data.id)).to.eql(pm.environment.get('testProfileId'));",
+                "});"
+              ]
+            }
+          }]
+        },
+        {
+          "name": "删除临时个人资料",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+            "url": "{{baseUrl}}/profile/{{testProfileId}}"
+          },
+          "event": [{
+            "listen": "test",
+            "script": {
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('Temporary profile is deleted', function () {",
+                "  pm.response.to.have.status(200);",
+                "  const body = pm.response.json();",
+                "  pm.expect(body.success).to.eql(true);",
+                "  pm.expect(String(body.data.id)).to.eql(pm.environment.get('testProfileId'));",
+                "});"
+              ]
+            }
+          }]
+        }
+      ]
+    },
+    {
+      "name": "项目与文章 CRUD",
+      "item": [
+        {
+          "name": "创建临时项目",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.environment.set('projectId', 'api-test-' + pm.variables.replaceIn('{{$guid}}'));"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Project is created with HTTP 201', function () {",
+                  "  pm.response.to.have.status(201);",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.success).to.eql(true);",
+                  "  pm.expect(body.data.id).to.eql(pm.environment.get('projectId'));",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\"id\":\"{{projectId}}\",\"profileId\":\"{{profileId}}\",\"name\":\"Apifox 临时测试项目\",\"description\":\"由接口测试集合创建，随后删除。\",\"status\":\"规划中\",\"tech\":\"Node.js / MySQL\",\"period\":\"2026.10\"}", "options": { "raw": { "language": "json" } } },
+            "url": "{{baseUrl}}/projects"
+          }
+        },
+        {
+          "name": "查询项目详情",
+          "request": { "method": "GET", "url": "{{baseUrl}}/projects/{{projectId}}" },
+          "event": [{
+            "listen": "test",
+            "script": {
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('Created project can be queried', function () {",
+                "  pm.response.to.have.status(200);",
+                "  const body = pm.response.json();",
+                "  pm.expect(body.success).to.eql(true);",
+                "  pm.expect(body.data.id).to.eql(pm.environment.get('projectId'));",
+                "});"
+              ]
+            }
+          }]
+        },
+        {
+          "name": "修改项目",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\"profileId\":\"{{profileId}}\",\"name\":\"Apifox 临时测试项目（已修改）\",\"description\":\"验证项目更新接口。\",\"status\":\"进行中\",\"tech\":\"Node.js / MySQL / REST\",\"period\":\"2026.10 - 至今\"}", "options": { "raw": { "language": "json" } } },
+            "url": "{{baseUrl}}/projects/{{projectId}}"
+          },
+          "event": [{
+            "listen": "test",
+            "script": {
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('Project update returns updated resource', function () {",
+                "  pm.response.to.have.status(200);",
+                "  const body = pm.response.json();",
+                "  pm.expect(body.success).to.eql(true);",
+                "  pm.expect(body.data.name).to.include('已修改');",
+                "});"
+              ]
+            }
+          }]
+        },
+        {
+          "name": "创建临时草稿文章",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.environment.set('articleId', 'api-test-article-' + pm.variables.replaceIn('{{$guid}}'));"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Draft article is created', function () {",
+                  "  pm.response.to.have.status(201);",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.success).to.eql(true);",
+                  "  pm.expect(body.data.published).to.eql(false);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\"id\":\"{{articleId}}\",\"profileId\":\"{{profileId}}\",\"projectId\":\"{{projectId}}\",\"title\":\"Apifox 临时草稿\",\"summary\":\"草稿公开性和 CRUD 测试。\",\"content\":\"由接口测试集合创建，随后删除。\",\"createdAt\":\"2026-10-23\",\"published\":false}", "options": { "raw": { "language": "json" } } },
+            "url": "{{baseUrl}}/articles"
+          }
+        },
+        {
+          "name": "草稿详情不对公众开放",
+          "request": { "method": "GET", "url": "{{baseUrl}}/articles/{{articleId}}" },
+          "event": [{
+            "listen": "test",
+            "script": {
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('Unpublished article is hidden with 404', function () {",
+                "  pm.response.to.have.status(404);",
+                "  const body = pm.response.json();",
+                "  pm.expect(body.success).to.eql(false);",
+                "});"
+              ]
+            }
+          }]
+        },
+        {
+          "name": "管理员草稿列表可见",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+            "url": "{{baseUrl}}/articles/manage"
+          },
+          "event": [{
+            "listen": "test",
+            "script": {
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('Admin can list the draft', function () {",
+                "  pm.response.to.have.status(200);",
+                "  const body = pm.response.json();",
+                "  pm.expect(body.success).to.eql(true);",
+                "  pm.expect(body.data.some(function (article) { return article.id === pm.environment.get('articleId'); })).to.eql(true);",
+                "});"
+              ]
+            }
+          }]
+        },
+        {
+          "name": "导出全部数据库数据",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+            "url": "{{baseUrl}}/export"
+          },
+          "event": [{
+            "listen": "test",
+            "script": {
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('Admin export contains all collections and unpublished drafts', function () {",
+                "  pm.response.to.have.status(200);",
+                "  const body = pm.response.json();",
+                "  pm.expect(body.success).to.eql(true);",
+                "  pm.expect(body.data.exportedAt).to.be.a('string').and.not.empty;",
+                "  pm.expect(body.data.profiles).to.be.an('array').that.is.not.empty;",
+                "  pm.expect(body.data.skills).to.be.an('array');",
+                "  pm.expect(body.data.projects).to.be.an('array');",
+                "  pm.expect(body.data.articles).to.be.an('array');",
+                "  pm.expect(body.data.articles.some(function (article) { return article.id === pm.environment.get('articleId') && article.published === false; })).to.eql(true);",
+                "});"
+              ]
+            }
+          }]
+        },
+        {
+          "name": "发布文章",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\"profileId\":\"{{profileId}}\",\"projectId\":\"{{projectId}}\",\"title\":\"Apifox 临时文章（已发布）\",\"summary\":\"验证发布和更新接口。\",\"content\":\"由接口测试集合创建，随后删除。\",\"createdAt\":\"2026-10-23\",\"published\":true}", "options": { "raw": { "language": "json" } } },
+            "url": "{{baseUrl}}/articles/{{articleId}}"
+          },
+          "event": [{
+            "listen": "test",
+            "script": {
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('Article update publishes the article', function () {",
+                "  pm.response.to.have.status(200);",
+                "  const body = pm.response.json();",
+                "  pm.expect(body.success).to.eql(true);",
+                "  pm.expect(body.data.published).to.eql(true);",
+                "});"
+              ]
+            }
+          }]
+        },
+        {
+          "name": "删除测试文章",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+            "url": "{{baseUrl}}/articles/{{articleId}}"
+          },
+          "event": [{
+            "listen": "test",
+            "script": {
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('Article is deleted', function () {",
+                "  pm.response.to.have.status(200);",
+                "  const body = pm.response.json();",
+                "  pm.expect(body.success).to.eql(true);",
+                "  pm.expect(body.data.id).to.eql(pm.environment.get('articleId'));",
+                "});"
+              ]
+            }
+          }]
+        },
+        {
+          "name": "删除测试项目",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+            "url": "{{baseUrl}}/projects/{{projectId}}"
+          },
+          "event": [{
+            "listen": "test",
+            "script": {
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('Project is deleted', function () {",
+                "  pm.response.to.have.status(200);",
+                "  const body = pm.response.json();",
+                "  pm.expect(body.success).to.eql(true);",
+                "  pm.expect(body.data.id).to.eql(pm.environment.get('projectId'));",
+                "});"
+              ]
+            }
+          }]
+        }
+      ]
+    },
+    {
+      "name": "技能 CRUD",
+      "item": [
+        {
+          "name": "创建测试技能",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\"profileId\":\"{{profileId}}\",\"name\":\"Apifox-临时技能\",\"sortOrder\":999}", "options": { "raw": { "language": "json" } } },
+            "url": "{{baseUrl}}/skills"
+          },
+          "event": [{
+            "listen": "test",
+            "script": {
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('Skill is created', function () {",
+                "  pm.response.to.have.status(201);",
+                "  const body = pm.response.json();",
+                "  pm.expect(body.success).to.eql(true);",
+                "  pm.environment.set('skillId', String(body.data.id));",
+                "});"
+              ]
+            }
+          }]
+        },
+        {
+          "name": "修改测试技能",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\"profileId\":\"{{profileId}}\",\"name\":\"Apifox-临时技能-已修改\",\"sortOrder\":1000}", "options": { "raw": { "language": "json" } } },
+            "url": "{{baseUrl}}/skills/{{skillId}}"
+          },
+          "event": [{
+            "listen": "test",
+            "script": {
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('Skill is updated', function () {",
+                "  pm.response.to.have.status(200);",
+                "  const body = pm.response.json();",
+                "  pm.expect(body.success).to.eql(true);",
+                "  pm.expect(body.data.name).to.include('已修改');",
+                "});"
+              ]
+            }
+          }]
+        },
+        {
+          "name": "删除测试技能",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+            "url": "{{baseUrl}}/skills/{{skillId}}"
+          },
+          "event": [{
+            "listen": "test",
+            "script": {
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('Skill is deleted', function () {",
+                "  pm.response.to.have.status(200);",
+                "  const body = pm.response.json();",
+                "  pm.expect(body.success).to.eql(true);",
+                "});"
+              ]
+            }
+          }]
+        }
+      ]
+    },
+    {
+      "name": "错误响应格式",
+      "request": { "method": "GET", "url": "{{baseUrl}}/projects/not-a-real-project-id" },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "type": "text/javascript",
+          "exec": [
+            "pm.test('Not found uses standard error envelope', function () {",
+            "  pm.response.to.have.status(404);",
+            "  const body = pm.response.json();",
+            "  pm.expect(body.success).to.eql(false);",
+            "  pm.expect(body.error.code).to.eql('RESOURCE_NOT_FOUND');",
+            "  pm.expect(body.error.message).to.be.a('string').and.not.empty;",
+            "});"
+          ]
+        }
+      }]
+    },
+    {
+      "name": "查询参数校验错误",
+      "request": { "method": "GET", "url": "{{baseUrl}}/skills?profileId=not-a-number" },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "type": "text/javascript",
+          "exec": [
+            "pm.test('Invalid query parameter returns standard 400 error', function () {",
+            "  pm.response.to.have.status(400);",
+            "  const body = pm.response.json();",
+            "  pm.expect(body.success).to.eql(false);",
+            "  pm.expect(body.error.code).to.eql('VALIDATION_ERROR');",
+            "  pm.expect(body.error.message).to.be.a('string').and.not.empty;",
+            "});"
+          ]
+        }
+      }]
+    },
+    {
+      "name": "未登录导出应被拒绝",
+      "request": { "method": "GET", "url": "{{baseUrl}}/export" },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "type": "text/javascript",
+          "exec": [
+            "pm.test('Export requires an authenticated admin session', function () {",
+            "  pm.response.to.have.status(401);",
+            "  const body = pm.response.json();",
+            "  pm.expect(body.success).to.eql(false);",
+            "  pm.expect(body.error.code).to.eql('UNAUTHORIZED');",
+            "});"
+          ]
+        }
+      }]
+    },
+    {
+      "name": "退出管理员会话",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+        "url": "{{baseUrl}}/auth/logout"
+      },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "type": "text/javascript",
+          "exec": [
+            "pm.test('Admin session is revoked', function () {",
+            "  pm.response.to.have.status(200);",
+            "  const body = pm.response.json();",
+            "  pm.expect(body.success).to.eql(true);",
+            "  pm.environment.unset('adminToken');",
+            "});"
+          ]
+        }
+      }]
+    }
+  ]
+}

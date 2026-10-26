@@ -12,6 +12,7 @@
       <RouterLink :to="{ name: 'project-detail', params: { id: project.id } }">{{ project.name }}</RouterLink>
     </p>
   </article>
+  <section v-else class="page-surface"><h1>文章不存在或尚未发布</h1><RouterLink :to="{ name: 'articles' }">返回文章列表</RouterLink></section>
 </template>
 
 <script setup>
@@ -25,6 +26,7 @@ const props = defineProps({ id: { type: String, required: true } })
 const articleStore = useArticleStore()
 const projectStore = useProjectStore()
 const { articles } = storeToRefs(articleStore)
+// 草稿不进入公开详情；已发布文章可选显示其关联项目。
 const article = computed(() => articles.value.find((item) => item.id === props.id && item.published))
 const project = computed(() => article.value?.projectId ? projectStore.getProjectById(article.value.projectId) : null)
 </script>

@@ -24,7 +24,7 @@
 </template>
 
 <script setup>
-// 用 defineProps 接收父组件传入的个人信息
+// 个人卡片从父级接收资料快照，头像符号缺省时使用项目默认头像。
 defineProps({
   userInfo: {
     type: Object,

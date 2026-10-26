@@ -1,0 +1,7 @@
+{
+  "name": "个人主页 API",
+  "version": "1.0.0",
+  "description": "个人主页项目的 Express REST API 接口说明",
+  "title": "个人主页 API 文档",
+  "url": "http://localhost:3000"
+}

@@ -13,6 +13,7 @@ const router = createRouter({
     return { top: 0 }
   },
   routes: [
+    // 公开页面按需加载，避免首屏加载时打包所有页面代码。
     {
       path: '/',
       name: 'home',
@@ -83,24 +84,27 @@ const router = createRouter({
   ]
 })
 
-router.beforeEach((to) => {
-  // 要求 3：路由守卫读取持久化的 User Store 登录态，未登录访问后台时转到登录页。
+router.beforeEach(async (to) => {
   const userStore = useUserStore(pinia)
-  const projectStore = useProjectStore(pinia)
   const articleStore = useArticleStore(pinia)
 
-  // 避免访问已删除或不存在的项目，以及未发布/不存在的文章详情。
-  if (to.name === 'project-detail' && !projectStore.getProjectById(to.params.id)) {
-    return { name: 'not-found' }
-  }
-  if (to.name === 'article-detail') {
-    const article = articleStore.getArticleById(to.params.id)
-    if (!article || !article.published) return { name: 'not-found' }
+  // 进入登录页或后台时恢复服务端会话，刷新页面后仍按真实登录态决定权限。
+  if ((to.meta.requiresAdmin || to.name === 'login') && !userStore.isLoggedIn) {
+    try {
+      await userStore.restoreSession()
+    } catch {
+      if (to.meta.requiresAdmin) {
+        return { name: 'login', query: { redirect: to.fullPath } }
+      }
+    }
   }
   if (to.meta.requiresAdmin && !userStore.isLoggedIn) {
-    // 登录成功后回到用户原本想访问的后台地址。
     return { name: 'login', query: { redirect: to.fullPath } }
   }
+  if (to.meta.requiresAdmin && !articleStore.adminLoaded) {
+    await articleStore.loadAdmin()
+  }
+  // 已登录用户访问登录页时直接返回管理页，避免重复认证。
   if (to.name === 'login' && userStore.isLoggedIn) return { name: 'admin-profile' }
 })
 
@@ -109,6 +113,7 @@ let currentProjectId = ''
 let titleWatcherStarted = false
 
 function updateDocumentTitle() {
+  // 项目详情页优先使用项目名，其它页面使用路由标题并附加站点姓名。
   const projectStore = useProjectStore(pinia)
   const project = currentProjectId ? projectStore.getProjectById(currentProjectId) : null
   document.title = `${project?.name || currentPageTitle} · ${projectStore.userInfo.name}`
@@ -118,6 +123,7 @@ router.afterEach((to) => {
   currentPageTitle = to.meta.title || '个人主页'
   currentProjectId = to.name === 'project-detail' ? String(to.params.id) : ''
   updateDocumentTitle()
+  // 只安装一次姓名监听，资料修改后浏览器标题能自动更新。
   if (!titleWatcherStarted) {
     titleWatcherStarted = true
     watch(() => useProjectStore(pinia).userInfo.name, updateDocumentTitle)

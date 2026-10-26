@@ -1,5 +1,10 @@
 <template>
   <NotFoundPage v-if="route.name === 'not-found'" />
+  <div v-else-if="loading" class="startup-state" role="status">正在连接数据库并加载主页内容…</div>
+  <div v-else-if="startupError" class="startup-state startup-error" role="alert">
+    <p>无法从数据库加载内容：{{ startupError }}</p>
+    <button class="button primary" type="button" @click="loadDatabase">重新连接</button>
+  </div>
   <div v-else class="app-wrapper">
     <AppHeader v-model:is-dark="isDarkTheme" />
     <main class="app-main"><RouterView /></main>
@@ -8,15 +13,40 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { RouterView, useRoute } from 'vue-router'
 import AppHeader from './components/AppHeader.vue'
 import AppFooter from './components/AppFooter.vue'
 import NotFoundPage from './components/NotFoundPage.vue'
+import { useArticleStore } from './stores/article.js'
+import { useProjectStore } from './stores/project.js'
+import { useUserStore } from './stores/user.js'
 
 const isDarkTheme = ref(false)
 const route = useRoute()
+const loading = ref(true)
+const startupError = ref('')
+const projectStore = useProjectStore()
+const articleStore = useArticleStore()
+const userStore = useUserStore()
 
+// 首屏并行加载公开内容；如果浏览器已有会话，再额外加载管理员可见的草稿。
+async function loadDatabase() {
+  loading.value = true
+  startupError.value = ''
+  try {
+    await Promise.all([projectStore.load(), articleStore.load()])
+    if (await userStore.restoreSession()) await articleStore.loadAdmin()
+  } catch (error) {
+    startupError.value = error instanceof Error ? error.message : '数据库请求失败。'
+  } finally {
+    loading.value = false
+  }
+}
+
+onMounted(loadDatabase)
+
+// 主题开关只维护在应用状态中，并通过 body 类统一驱动全局主题变量。
 watch(isDarkTheme, (enabled) => {
   document.body.classList.toggle('dark', enabled)
 })
@@ -68,6 +98,17 @@ a { color: var(--accent); }
   margin: 0 auto;
   padding: 2rem 1.5rem;
 }
+.startup-state {
+  min-height: 100vh;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 1rem;
+  padding: 2rem;
+  color: var(--text-secondary);
+  text-align: center;
+}
+.startup-error { color: #b91c1c; }
 .page-surface {
   width: 100%;
   padding: 2rem;

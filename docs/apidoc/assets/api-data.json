@@ -1,0 +1,3554 @@
+[
+  {
+    "type": "post",
+    "url": "/api/articles",
+    "title": "Create article",
+    "name": "CreateArticle",
+    "group": "Articles",
+    "version": "1.0.0",
+    "body": [
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "id",
+        "isArray": false,
+        "description": "<p>Article identifier, max 100 chars.</p>"
+      },
+      {
+        "group": "Body",
+        "type": "Number",
+        "optional": false,
+        "field": "profileId",
+        "isArray": false,
+        "description": "<p>Parent profile ID.</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String|null",
+        "optional": false,
+        "field": "projectId",
+        "isArray": false,
+        "description": "<p>Related project ID or null.</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "title",
+        "isArray": false,
+        "description": "<p>Title, max 100 chars.</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "summary",
+        "isArray": false,
+        "description": "<p>Summary, max 240 chars.</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "content",
+        "isArray": false,
+        "description": "<p>Article body.</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "createdAt",
+        "isArray": false,
+        "description": "<p>Publish date in <code>YYYY-MM-DD</code> format.</p>"
+      },
+      {
+        "group": "Body",
+        "type": "Boolean",
+        "optional": false,
+        "field": "published",
+        "isArray": false,
+        "description": "<p>Whether it is public.</p>",
+        "checked": false
+      }
+    ],
+    "success": {
+      "fields": {
+        "201": [
+          {
+            "group": "201",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "isArray": false,
+            "description": "<p>Created article.</p>"
+          }
+        ],
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>true</code>.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "isArray": false,
+            "description": "<p>Response payload.</p>"
+          }
+        ]
+      }
+    },
+    "filename": "api-docs.js",
+    "groupTitle": "Articles",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "isArray": false,
+            "description": "<p>Bearer session token returned by <code>/api/auth/login</code>.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "400": [
+          {
+            "group": "400",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>false</code>.</p>"
+          },
+          {
+            "group": "400",
+            "type": "Object",
+            "optional": false,
+            "field": "error",
+            "isArray": false,
+            "description": "<p>Error details.</p>"
+          },
+          {
+            "group": "400",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.code",
+            "isArray": false,
+            "description": "<p><code>VALIDATION_ERROR</code>.</p>"
+          },
+          {
+            "group": "400",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.message",
+            "isArray": false,
+            "description": "<p>Describes invalid input.</p>"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "delete",
+    "url": "/api/articles/:id",
+    "title": "Delete article",
+    "name": "DeleteArticle",
+    "group": "Articles",
+    "version": "1.0.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "isArray": false,
+            "description": "<p>Article identifier.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "data",
+              "field": "data",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "data.id",
+            "isArray": false,
+            "description": "<p>Deleted article ID.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>true</code>.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "isArray": false,
+            "description": "<p>Response payload.</p>"
+          }
+        ]
+      }
+    },
+    "filename": "api-docs.js",
+    "groupTitle": "Articles",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "isArray": false,
+            "description": "<p>Bearer session token returned by <code>/api/auth/login</code>.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "404": [
+          {
+            "group": "404",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>false</code>.</p>"
+          },
+          {
+            "group": "404",
+            "type": "Object",
+            "optional": false,
+            "field": "error",
+            "isArray": false,
+            "description": "<p>Error details.</p>"
+          },
+          {
+            "group": "404",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.code",
+            "isArray": false,
+            "description": "<p><code>RESOURCE_NOT_FOUND</code>.</p>"
+          },
+          {
+            "group": "404",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.message",
+            "isArray": false,
+            "description": "<p>Resource was not found.</p>"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "get",
+    "url": "/api/articles/:id",
+    "title": "Get published article",
+    "name": "GetArticle",
+    "group": "Articles",
+    "version": "1.0.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "isArray": false,
+            "description": "<p>Article identifier.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "isArray": false,
+            "description": "<p>Published article.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>true</code>.</p>"
+          }
+        ]
+      }
+    },
+    "filename": "api-docs.js",
+    "groupTitle": "Articles",
+    "error": {
+      "fields": {
+        "404": [
+          {
+            "group": "404",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>false</code>.</p>"
+          },
+          {
+            "group": "404",
+            "type": "Object",
+            "optional": false,
+            "field": "error",
+            "isArray": false,
+            "description": "<p>Error details.</p>"
+          },
+          {
+            "group": "404",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.code",
+            "isArray": false,
+            "description": "<p><code>RESOURCE_NOT_FOUND</code>.</p>"
+          },
+          {
+            "group": "404",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.message",
+            "isArray": false,
+            "description": "<p>Resource was not found.</p>"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "get",
+    "url": "/api/articles/manage/:id",
+    "title": "Get managed article",
+    "name": "GetManagedArticle",
+    "group": "Articles",
+    "version": "1.0.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "isArray": false,
+            "description": "<p>Article identifier.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "isArray": false,
+            "description": "<p>Article record including drafts.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>true</code>.</p>"
+          }
+        ]
+      }
+    },
+    "filename": "api-docs.js",
+    "groupTitle": "Articles",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "isArray": false,
+            "description": "<p>Bearer session token returned by <code>/api/auth/login</code>.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "404": [
+          {
+            "group": "404",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>false</code>.</p>"
+          },
+          {
+            "group": "404",
+            "type": "Object",
+            "optional": false,
+            "field": "error",
+            "isArray": false,
+            "description": "<p>Error details.</p>"
+          },
+          {
+            "group": "404",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.code",
+            "isArray": false,
+            "description": "<p><code>RESOURCE_NOT_FOUND</code>.</p>"
+          },
+          {
+            "group": "404",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.message",
+            "isArray": false,
+            "description": "<p>Resource was not found.</p>"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "get",
+    "url": "/api/articles",
+    "title": "List published articles",
+    "name": "ListArticles",
+    "group": "Articles",
+    "version": "1.0.0",
+    "query": [
+      {
+        "group": "Query",
+        "type": "String",
+        "optional": true,
+        "field": "projectId",
+        "isArray": false,
+        "description": "<p>Filter by project ID.</p>"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "data",
+            "isArray": true,
+            "description": "<p>Published article records.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>true</code>.</p>"
+          }
+        ]
+      }
+    },
+    "filename": "api-docs.js",
+    "groupTitle": "Articles",
+    "error": {
+      "fields": {
+        "400": [
+          {
+            "group": "400",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>false</code>.</p>"
+          },
+          {
+            "group": "400",
+            "type": "Object",
+            "optional": false,
+            "field": "error",
+            "isArray": false,
+            "description": "<p>Error details.</p>"
+          },
+          {
+            "group": "400",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.code",
+            "isArray": false,
+            "description": "<p><code>VALIDATION_ERROR</code>.</p>"
+          },
+          {
+            "group": "400",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.message",
+            "isArray": false,
+            "description": "<p>Describes invalid input.</p>"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "get",
+    "url": "/api/articles/manage",
+    "title": "List all articles",
+    "name": "ListManagedArticles",
+    "group": "Articles",
+    "version": "1.0.0",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "data",
+            "isArray": true,
+            "description": "<p>Article records including drafts.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>true</code>.</p>"
+          }
+        ]
+      }
+    },
+    "filename": "api-docs.js",
+    "groupTitle": "Articles",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "isArray": false,
+            "description": "<p>Bearer session token returned by <code>/api/auth/login</code>.</p>"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "put",
+    "url": "/api/articles/:id",
+    "title": "Update article",
+    "name": "UpdateArticle",
+    "group": "Articles",
+    "version": "1.0.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "isArray": false,
+            "description": "<p>Article identifier; immutable.</p>"
+          }
+        ]
+      }
+    },
+    "body": [
+      {
+        "group": "Body",
+        "type": "Number",
+        "optional": false,
+        "field": "profileId",
+        "isArray": false,
+        "description": "<p>Parent profile ID.</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String|null",
+        "optional": false,
+        "field": "projectId",
+        "isArray": false,
+        "description": "<p>Related project ID or null.</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "title",
+        "isArray": false,
+        "description": "<p>Title.</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "summary",
+        "isArray": false,
+        "description": "<p>Summary.</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "content",
+        "isArray": false,
+        "description": "<p>Article body.</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "createdAt",
+        "isArray": false,
+        "description": "<p>Publish date in <code>YYYY-MM-DD</code> format.</p>"
+      },
+      {
+        "group": "Body",
+        "type": "Boolean",
+        "optional": false,
+        "field": "published",
+        "isArray": false,
+        "description": "<p>Whether it is public.</p>",
+        "checked": false
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "isArray": false,
+            "description": "<p>Updated article.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>true</code>.</p>"
+          }
+        ]
+      }
+    },
+    "filename": "api-docs.js",
+    "groupTitle": "Articles",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "isArray": false,
+            "description": "<p>Bearer session token returned by <code>/api/auth/login</code>.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "400": [
+          {
+            "group": "400",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>false</code>.</p>"
+          },
+          {
+            "group": "400",
+            "type": "Object",
+            "optional": false,
+            "field": "error",
+            "isArray": false,
+            "description": "<p>Error details.</p>"
+          },
+          {
+            "group": "400",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.code",
+            "isArray": false,
+            "description": "<p><code>VALIDATION_ERROR</code>.</p>"
+          },
+          {
+            "group": "400",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.message",
+            "isArray": false,
+            "description": "<p>Describes invalid input.</p>"
+          }
+        ],
+        "404": [
+          {
+            "group": "404",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>false</code>.</p>"
+          },
+          {
+            "group": "404",
+            "type": "Object",
+            "optional": false,
+            "field": "error",
+            "isArray": false,
+            "description": "<p>Error details.</p>"
+          },
+          {
+            "group": "404",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.code",
+            "isArray": false,
+            "description": "<p><code>RESOURCE_NOT_FOUND</code>.</p>"
+          },
+          {
+            "group": "404",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.message",
+            "isArray": false,
+            "description": "<p>Resource was not found.</p>"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "post",
+    "url": "/api/auth/login",
+    "title": "Admin login",
+    "name": "AdminLogin",
+    "group": "Authentication",
+    "version": "1.0.0",
+    "body": [
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "username",
+        "isArray": false,
+        "description": "<p>Configured admin username.</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "password",
+        "isArray": false,
+        "description": "<p>Admin secret configured by <code>ADMIN_API_TOKEN</code>.</p>"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "data",
+              "field": "data",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "data.token",
+            "isArray": false,
+            "description": "<p>Short-lived bearer session token.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "parentNode": {
+              "path": "data",
+              "field": "data",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "data.expiresIn",
+            "isArray": false,
+            "description": "<p>Session lifetime in seconds.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "data",
+              "field": "data",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "data.username",
+            "isArray": false,
+            "description": "<p>Authenticated username.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>true</code>.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "isArray": false,
+            "description": "<p>Response payload.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success:",
+          "content": "HTTP/1.1 200 OK\n{\"success\":true,\"data\":{\"token\":\"<session-token>\",\"expiresIn\":28800,\"username\":\"admin\"}}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "400": [
+          {
+            "group": "400",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>false</code>.</p>"
+          },
+          {
+            "group": "400",
+            "type": "Object",
+            "optional": false,
+            "field": "error",
+            "isArray": false,
+            "description": "<p>Error details.</p>"
+          },
+          {
+            "group": "400",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.code",
+            "isArray": false,
+            "description": "<p><code>VALIDATION_ERROR</code>.</p>"
+          },
+          {
+            "group": "400",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.message",
+            "isArray": false,
+            "description": "<p>Describes invalid input.</p>"
+          }
+        ],
+        "401": [
+          {
+            "group": "401",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.code",
+            "isArray": false,
+            "description": "<p><code>INVALID_CREDENTIALS</code>.</p>"
+          }
+        ],
+        "503": [
+          {
+            "group": "503",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.code",
+            "isArray": false,
+            "description": "<p><code>AUTH_NOT_CONFIGURED</code>.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "examples": [
+        {
+          "title": "Request:",
+          "content": "{\"username\":\"admin\",\"password\":\"your-local-admin-secret\"}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "api-docs.js",
+    "groupTitle": "Authentication"
+  },
+  {
+    "type": "post",
+    "url": "/api/auth/logout",
+    "title": "Admin logout",
+    "name": "AdminLogout",
+    "group": "Authentication",
+    "version": "1.0.0",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "parentNode": {
+              "path": "data",
+              "field": "data",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "data.loggedOut",
+            "isArray": false,
+            "description": "<p>Whether the session is revoked.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>true</code>.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "isArray": false,
+            "description": "<p>Response payload.</p>"
+          }
+        ]
+      }
+    },
+    "filename": "api-docs.js",
+    "groupTitle": "Authentication",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "isArray": false,
+            "description": "<p>Bearer session token returned by <code>/api/auth/login</code>.</p>"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "get",
+    "url": "/api/auth/me",
+    "title": "Current admin session",
+    "name": "CurrentAdmin",
+    "group": "Authentication",
+    "version": "1.0.0",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "data",
+              "field": "data",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "data.username",
+            "isArray": false,
+            "description": "<p>Authenticated username.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>true</code>.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "isArray": false,
+            "description": "<p>Response payload.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "401": [
+          {
+            "group": "401",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.code",
+            "isArray": false,
+            "description": "<p><code>UNAUTHORIZED</code>.</p>"
+          }
+        ]
+      }
+    },
+    "filename": "api-docs.js",
+    "groupTitle": "Authentication",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "isArray": false,
+            "description": "<p>Bearer session token returned by <code>/api/auth/login</code>.</p>"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "get",
+    "url": "/api/export",
+    "title": "Export all content",
+    "name": "ExportAllData",
+    "group": "Export",
+    "version": "1.0.0",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "data",
+              "field": "data",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "data.exportedAt",
+            "isArray": false,
+            "description": "<p>Export generation time in ISO 8601 format.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "optional": false,
+            "parentNode": {
+              "path": "data",
+              "field": "data",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "data.profiles",
+            "isArray": true,
+            "description": "<p>All profile records.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "optional": false,
+            "parentNode": {
+              "path": "data",
+              "field": "data",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "data.skills",
+            "isArray": true,
+            "description": "<p>All skill records.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "optional": false,
+            "parentNode": {
+              "path": "data",
+              "field": "data",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "data.projects",
+            "isArray": true,
+            "description": "<p>All project records.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "optional": false,
+            "parentNode": {
+              "path": "data",
+              "field": "data",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "data.articles",
+            "isArray": true,
+            "description": "<p>All articles, including unpublished drafts.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>true</code>.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "isArray": false,
+            "description": "<p>Response payload.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success:",
+          "content": "HTTP/1.1 200 OK\n{\"success\":true,\"data\":{\"exportedAt\":\"2026-10-23T00:00:00.000Z\",\"profiles\":[],\"skills\":[],\"projects\":[],\"articles\":[]}}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "401": [
+          {
+            "group": "401",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.code",
+            "isArray": false,
+            "description": "<p><code>UNAUTHORIZED</code>.</p>"
+          }
+        ]
+      }
+    },
+    "filename": "api-docs.js",
+    "groupTitle": "Export",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "isArray": false,
+            "description": "<p>Bearer session token returned by <code>/api/auth/login</code>.</p>"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "post",
+    "url": "/api/profile",
+    "title": "Create profile",
+    "name": "CreateProfile",
+    "group": "Profile",
+    "version": "1.0.0",
+    "body": [
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "name",
+        "isArray": false,
+        "description": "<p>Display name, max 80 chars.</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "title",
+        "isArray": false,
+        "description": "<p>Headline, max 120 chars.</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "bio",
+        "isArray": false,
+        "description": "<p>Biography text.</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "email",
+        "isArray": false,
+        "description": "<p>Email address, max 254 chars.</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "city",
+        "isArray": false,
+        "description": "<p>City, max 100 chars.</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String|null",
+        "optional": false,
+        "field": "birthday",
+        "isArray": false,
+        "description": "<p>Birthday in <code>YYYY-MM-DD</code> format or null.</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "job",
+        "isArray": false,
+        "description": "<p>Occupation, max 100 chars.</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": true,
+        "field": "avatarEmoji",
+        "isArray": false,
+        "description": "<p>Avatar, max 32 chars.</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String[]",
+        "optional": true,
+        "field": "skills",
+        "isArray": true,
+        "description": "<p>Skill names, max 80 chars each.</p>"
+      }
+    ],
+    "success": {
+      "fields": {
+        "201": [
+          {
+            "group": "201",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "isArray": false,
+            "description": "<p>Created profile with ID and skills.</p>"
+          }
+        ],
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>true</code>.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "isArray": false,
+            "description": "<p>Response payload.</p>"
+          }
+        ]
+      }
+    },
+    "filename": "api-docs.js",
+    "groupTitle": "Profile",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "isArray": false,
+            "description": "<p>Bearer session token returned by <code>/api/auth/login</code>.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "400": [
+          {
+            "group": "400",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>false</code>.</p>"
+          },
+          {
+            "group": "400",
+            "type": "Object",
+            "optional": false,
+            "field": "error",
+            "isArray": false,
+            "description": "<p>Error details.</p>"
+          },
+          {
+            "group": "400",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.code",
+            "isArray": false,
+            "description": "<p><code>VALIDATION_ERROR</code>.</p>"
+          },
+          {
+            "group": "400",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.message",
+            "isArray": false,
+            "description": "<p>Describes invalid input.</p>"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "delete",
+    "url": "/api/profile/:id",
+    "title": "Delete profile",
+    "name": "DeleteProfile",
+    "group": "Profile",
+    "version": "1.0.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "isArray": false,
+            "description": "<p>Profile ID.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "data",
+              "field": "data",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "data.id",
+            "isArray": false,
+            "description": "<p>Deleted profile ID.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>true</code>.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "isArray": false,
+            "description": "<p>Response payload.</p>"
+          }
+        ]
+      }
+    },
+    "filename": "api-docs.js",
+    "groupTitle": "Profile",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "isArray": false,
+            "description": "<p>Bearer session token returned by <code>/api/auth/login</code>.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "404": [
+          {
+            "group": "404",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>false</code>.</p>"
+          },
+          {
+            "group": "404",
+            "type": "Object",
+            "optional": false,
+            "field": "error",
+            "isArray": false,
+            "description": "<p>Error details.</p>"
+          },
+          {
+            "group": "404",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.code",
+            "isArray": false,
+            "description": "<p><code>RESOURCE_NOT_FOUND</code>.</p>"
+          },
+          {
+            "group": "404",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.message",
+            "isArray": false,
+            "description": "<p>Resource was not found.</p>"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "get",
+    "url": "/api/profile",
+    "title": "Get first profile",
+    "name": "GetProfile",
+    "group": "Profile",
+    "version": "1.0.0",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "parentNode": {
+              "path": "data",
+              "field": "data",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "data.id",
+            "isArray": false,
+            "description": "<p>Profile ID.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "data",
+              "field": "data",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "data.name",
+            "isArray": false,
+            "description": "<p>Display name.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "data",
+              "field": "data",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "data.title",
+            "isArray": false,
+            "description": "<p>Headline.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "data",
+              "field": "data",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "data.bio",
+            "isArray": false,
+            "description": "<p>Biography.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "data",
+              "field": "data",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "data.email",
+            "isArray": false,
+            "description": "<p>Email address.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "data",
+              "field": "data",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "data.city",
+            "isArray": false,
+            "description": "<p>City.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "data",
+              "field": "data",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "data.birthday",
+            "isArray": false,
+            "description": "<p>Birthday or null.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "data",
+              "field": "data",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "data.job",
+            "isArray": false,
+            "description": "<p>Occupation.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "data",
+              "field": "data",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "data.avatarEmoji",
+            "isArray": false,
+            "description": "<p>Avatar.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String[]",
+            "optional": false,
+            "parentNode": {
+              "path": "data",
+              "field": "data",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "data.skills",
+            "isArray": true,
+            "description": "<p>Skill names.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>true</code>.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "isArray": false,
+            "description": "<p>Response payload.</p>"
+          }
+        ]
+      }
+    },
+    "filename": "api-docs.js",
+    "groupTitle": "Profile",
+    "error": {
+      "fields": {
+        "404": [
+          {
+            "group": "404",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>false</code>.</p>"
+          },
+          {
+            "group": "404",
+            "type": "Object",
+            "optional": false,
+            "field": "error",
+            "isArray": false,
+            "description": "<p>Error details.</p>"
+          },
+          {
+            "group": "404",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.code",
+            "isArray": false,
+            "description": "<p><code>RESOURCE_NOT_FOUND</code>.</p>"
+          },
+          {
+            "group": "404",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.message",
+            "isArray": false,
+            "description": "<p>Resource was not found.</p>"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "get",
+    "url": "/api/profile/:id",
+    "title": "Get profile by ID",
+    "name": "GetProfileById",
+    "group": "Profile",
+    "version": "1.0.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "isArray": false,
+            "description": "<p>Positive profile ID.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "isArray": false,
+            "description": "<p>Profile with a <code>skills</code> array.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>true</code>.</p>"
+          }
+        ]
+      }
+    },
+    "filename": "api-docs.js",
+    "groupTitle": "Profile",
+    "error": {
+      "fields": {
+        "400": [
+          {
+            "group": "400",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>false</code>.</p>"
+          },
+          {
+            "group": "400",
+            "type": "Object",
+            "optional": false,
+            "field": "error",
+            "isArray": false,
+            "description": "<p>Error details.</p>"
+          },
+          {
+            "group": "400",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.code",
+            "isArray": false,
+            "description": "<p><code>VALIDATION_ERROR</code>.</p>"
+          },
+          {
+            "group": "400",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.message",
+            "isArray": false,
+            "description": "<p>Describes invalid input.</p>"
+          }
+        ],
+        "404": [
+          {
+            "group": "404",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>false</code>.</p>"
+          },
+          {
+            "group": "404",
+            "type": "Object",
+            "optional": false,
+            "field": "error",
+            "isArray": false,
+            "description": "<p>Error details.</p>"
+          },
+          {
+            "group": "404",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.code",
+            "isArray": false,
+            "description": "<p><code>RESOURCE_NOT_FOUND</code>.</p>"
+          },
+          {
+            "group": "404",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.message",
+            "isArray": false,
+            "description": "<p>Resource was not found.</p>"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "put",
+    "url": "/api/profile/:id",
+    "title": "Update profile",
+    "name": "UpdateProfile",
+    "group": "Profile",
+    "version": "1.0.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "isArray": false,
+            "description": "<p>Profile ID.</p>"
+          }
+        ]
+      }
+    },
+    "body": [
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "name",
+        "isArray": false,
+        "description": "<p>Display name.</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "title",
+        "isArray": false,
+        "description": "<p>Headline.</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "bio",
+        "isArray": false,
+        "description": "<p>Biography text.</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "email",
+        "isArray": false,
+        "description": "<p>Email address.</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "city",
+        "isArray": false,
+        "description": "<p>City.</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String|null",
+        "optional": false,
+        "field": "birthday",
+        "isArray": false,
+        "description": "<p>Birthday in <code>YYYY-MM-DD</code> format or null.</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "job",
+        "isArray": false,
+        "description": "<p>Occupation.</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": true,
+        "field": "avatarEmoji",
+        "isArray": false,
+        "description": "<p>Avatar.</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String[]",
+        "optional": true,
+        "field": "skills",
+        "isArray": true,
+        "description": "<p>Full replacement list of skill names.</p>"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "isArray": false,
+            "description": "<p>Updated profile with skills.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>true</code>.</p>"
+          }
+        ]
+      }
+    },
+    "filename": "api-docs.js",
+    "groupTitle": "Profile",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "isArray": false,
+            "description": "<p>Bearer session token returned by <code>/api/auth/login</code>.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "400": [
+          {
+            "group": "400",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>false</code>.</p>"
+          },
+          {
+            "group": "400",
+            "type": "Object",
+            "optional": false,
+            "field": "error",
+            "isArray": false,
+            "description": "<p>Error details.</p>"
+          },
+          {
+            "group": "400",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.code",
+            "isArray": false,
+            "description": "<p><code>VALIDATION_ERROR</code>.</p>"
+          },
+          {
+            "group": "400",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.message",
+            "isArray": false,
+            "description": "<p>Describes invalid input.</p>"
+          }
+        ],
+        "404": [
+          {
+            "group": "404",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>false</code>.</p>"
+          },
+          {
+            "group": "404",
+            "type": "Object",
+            "optional": false,
+            "field": "error",
+            "isArray": false,
+            "description": "<p>Error details.</p>"
+          },
+          {
+            "group": "404",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.code",
+            "isArray": false,
+            "description": "<p><code>RESOURCE_NOT_FOUND</code>.</p>"
+          },
+          {
+            "group": "404",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.message",
+            "isArray": false,
+            "description": "<p>Resource was not found.</p>"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "post",
+    "url": "/api/projects",
+    "title": "Create project",
+    "name": "CreateProject",
+    "group": "Projects",
+    "version": "1.0.0",
+    "body": [
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "id",
+        "isArray": false,
+        "description": "<p>Lowercase project ID containing letters, digits, or hyphens.</p>"
+      },
+      {
+        "group": "Body",
+        "type": "Number",
+        "optional": false,
+        "field": "profileId",
+        "isArray": false,
+        "description": "<p>Parent profile ID.</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "name",
+        "isArray": false,
+        "description": "<p>Project name, max 80 chars.</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "description",
+        "isArray": false,
+        "description": "<p>Description, max 500 chars.</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "allowedValues": [
+          "\"进行中\"",
+          "\"已完成\"",
+          "\"规划中\""
+        ],
+        "optional": false,
+        "field": "status",
+        "isArray": false,
+        "description": "<p>Project status.</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "tech",
+        "isArray": false,
+        "description": "<p>Technology summary, max 120 chars.</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "period",
+        "isArray": false,
+        "description": "<p>Display period, max 60 chars.</p>"
+      }
+    ],
+    "success": {
+      "fields": {
+        "201": [
+          {
+            "group": "201",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "isArray": false,
+            "description": "<p>Created project.</p>"
+          }
+        ],
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>true</code>.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "isArray": false,
+            "description": "<p>Response payload.</p>"
+          }
+        ]
+      }
+    },
+    "filename": "api-docs.js",
+    "groupTitle": "Projects",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "isArray": false,
+            "description": "<p>Bearer session token returned by <code>/api/auth/login</code>.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "400": [
+          {
+            "group": "400",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>false</code>.</p>"
+          },
+          {
+            "group": "400",
+            "type": "Object",
+            "optional": false,
+            "field": "error",
+            "isArray": false,
+            "description": "<p>Error details.</p>"
+          },
+          {
+            "group": "400",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.code",
+            "isArray": false,
+            "description": "<p><code>VALIDATION_ERROR</code>.</p>"
+          },
+          {
+            "group": "400",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.message",
+            "isArray": false,
+            "description": "<p>Describes invalid input.</p>"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "delete",
+    "url": "/api/projects/:id",
+    "title": "Delete project",
+    "name": "DeleteProject",
+    "group": "Projects",
+    "version": "1.0.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "isArray": false,
+            "description": "<p>Project identifier.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "data",
+              "field": "data",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "data.id",
+            "isArray": false,
+            "description": "<p>Deleted project ID.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>true</code>.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "isArray": false,
+            "description": "<p>Response payload.</p>"
+          }
+        ]
+      }
+    },
+    "filename": "api-docs.js",
+    "groupTitle": "Projects",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "isArray": false,
+            "description": "<p>Bearer session token returned by <code>/api/auth/login</code>.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "404": [
+          {
+            "group": "404",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>false</code>.</p>"
+          },
+          {
+            "group": "404",
+            "type": "Object",
+            "optional": false,
+            "field": "error",
+            "isArray": false,
+            "description": "<p>Error details.</p>"
+          },
+          {
+            "group": "404",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.code",
+            "isArray": false,
+            "description": "<p><code>RESOURCE_NOT_FOUND</code>.</p>"
+          },
+          {
+            "group": "404",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.message",
+            "isArray": false,
+            "description": "<p>Resource was not found.</p>"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "get",
+    "url": "/api/projects/:id",
+    "title": "Get project",
+    "name": "GetProject",
+    "group": "Projects",
+    "version": "1.0.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "isArray": false,
+            "description": "<p>Project identifier.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "isArray": false,
+            "description": "<p>Project record.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>true</code>.</p>"
+          }
+        ]
+      }
+    },
+    "filename": "api-docs.js",
+    "groupTitle": "Projects",
+    "error": {
+      "fields": {
+        "404": [
+          {
+            "group": "404",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>false</code>.</p>"
+          },
+          {
+            "group": "404",
+            "type": "Object",
+            "optional": false,
+            "field": "error",
+            "isArray": false,
+            "description": "<p>Error details.</p>"
+          },
+          {
+            "group": "404",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.code",
+            "isArray": false,
+            "description": "<p><code>RESOURCE_NOT_FOUND</code>.</p>"
+          },
+          {
+            "group": "404",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.message",
+            "isArray": false,
+            "description": "<p>Resource was not found.</p>"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "get",
+    "url": "/api/projects",
+    "title": "List projects",
+    "name": "ListProjects",
+    "group": "Projects",
+    "version": "1.0.0",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "data",
+            "isArray": true,
+            "description": "<p>Project records with <code>id</code>, <code>profileId</code>, <code>name</code>, <code>description</code>, <code>status</code>, <code>tech</code>, and <code>period</code>.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>true</code>.</p>"
+          }
+        ]
+      }
+    },
+    "filename": "api-docs.js",
+    "groupTitle": "Projects"
+  },
+  {
+    "type": "put",
+    "url": "/api/projects/:id",
+    "title": "Update project",
+    "name": "UpdateProject",
+    "group": "Projects",
+    "version": "1.0.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "isArray": false,
+            "description": "<p>Project identifier; immutable.</p>"
+          }
+        ]
+      }
+    },
+    "body": [
+      {
+        "group": "Body",
+        "type": "Number",
+        "optional": false,
+        "field": "profileId",
+        "isArray": false,
+        "description": "<p>Parent profile ID.</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "name",
+        "isArray": false,
+        "description": "<p>Project name.</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "description",
+        "isArray": false,
+        "description": "<p>Description.</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "allowedValues": [
+          "\"进行中\"",
+          "\"已完成\"",
+          "\"规划中\""
+        ],
+        "optional": false,
+        "field": "status",
+        "isArray": false,
+        "description": "<p>Project status.</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "tech",
+        "isArray": false,
+        "description": "<p>Technology summary.</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "period",
+        "isArray": false,
+        "description": "<p>Display period.</p>"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "isArray": false,
+            "description": "<p>Updated project.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>true</code>.</p>"
+          }
+        ]
+      }
+    },
+    "filename": "api-docs.js",
+    "groupTitle": "Projects",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "isArray": false,
+            "description": "<p>Bearer session token returned by <code>/api/auth/login</code>.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "400": [
+          {
+            "group": "400",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>false</code>.</p>"
+          },
+          {
+            "group": "400",
+            "type": "Object",
+            "optional": false,
+            "field": "error",
+            "isArray": false,
+            "description": "<p>Error details.</p>"
+          },
+          {
+            "group": "400",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.code",
+            "isArray": false,
+            "description": "<p><code>VALIDATION_ERROR</code>.</p>"
+          },
+          {
+            "group": "400",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.message",
+            "isArray": false,
+            "description": "<p>Describes invalid input.</p>"
+          }
+        ],
+        "404": [
+          {
+            "group": "404",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>false</code>.</p>"
+          },
+          {
+            "group": "404",
+            "type": "Object",
+            "optional": false,
+            "field": "error",
+            "isArray": false,
+            "description": "<p>Error details.</p>"
+          },
+          {
+            "group": "404",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.code",
+            "isArray": false,
+            "description": "<p><code>RESOURCE_NOT_FOUND</code>.</p>"
+          },
+          {
+            "group": "404",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.message",
+            "isArray": false,
+            "description": "<p>Resource was not found.</p>"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "post",
+    "url": "/api/skills",
+    "title": "Create skill",
+    "name": "CreateSkill",
+    "group": "Skills",
+    "version": "1.0.0",
+    "body": [
+      {
+        "group": "Body",
+        "type": "Number",
+        "optional": false,
+        "field": "profileId",
+        "isArray": false,
+        "description": "<p>Parent profile ID.</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "name",
+        "isArray": false,
+        "description": "<p>Skill name, max 80 chars.</p>"
+      },
+      {
+        "group": "Body",
+        "type": "Number",
+        "optional": true,
+        "field": "sortOrder",
+        "isArray": false,
+        "defaultValue": "0",
+        "description": "<p>Integer from 0 to 4294967295.</p>"
+      }
+    ],
+    "success": {
+      "fields": {
+        "201": [
+          {
+            "group": "201",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "isArray": false,
+            "description": "<p>Created skill.</p>"
+          }
+        ],
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>true</code>.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "isArray": false,
+            "description": "<p>Response payload.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "400": [
+          {
+            "group": "400",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.code",
+            "isArray": false,
+            "description": "<p><code>INVALID_REFERENCE</code>.</p>"
+          },
+          {
+            "group": "400",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>false</code>.</p>"
+          },
+          {
+            "group": "400",
+            "type": "Object",
+            "optional": false,
+            "field": "error",
+            "isArray": false,
+            "description": "<p>Error details.</p>"
+          },
+          {
+            "group": "400",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.message",
+            "isArray": false,
+            "description": "<p>Describes invalid input.</p>"
+          }
+        ]
+      }
+    },
+    "filename": "api-docs.js",
+    "groupTitle": "Skills",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "isArray": false,
+            "description": "<p>Bearer session token returned by <code>/api/auth/login</code>.</p>"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "delete",
+    "url": "/api/skills/:id",
+    "title": "Delete skill",
+    "name": "DeleteSkill",
+    "group": "Skills",
+    "version": "1.0.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "isArray": false,
+            "description": "<p>Skill ID.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "data",
+              "field": "data",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "data.id",
+            "isArray": false,
+            "description": "<p>Deleted skill ID.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>true</code>.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "isArray": false,
+            "description": "<p>Response payload.</p>"
+          }
+        ]
+      }
+    },
+    "filename": "api-docs.js",
+    "groupTitle": "Skills",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "isArray": false,
+            "description": "<p>Bearer session token returned by <code>/api/auth/login</code>.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "404": [
+          {
+            "group": "404",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>false</code>.</p>"
+          },
+          {
+            "group": "404",
+            "type": "Object",
+            "optional": false,
+            "field": "error",
+            "isArray": false,
+            "description": "<p>Error details.</p>"
+          },
+          {
+            "group": "404",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.code",
+            "isArray": false,
+            "description": "<p><code>RESOURCE_NOT_FOUND</code>.</p>"
+          },
+          {
+            "group": "404",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.message",
+            "isArray": false,
+            "description": "<p>Resource was not found.</p>"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "get",
+    "url": "/api/skills/:id",
+    "title": "Get skill",
+    "name": "GetSkill",
+    "group": "Skills",
+    "version": "1.0.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "isArray": false,
+            "description": "<p>Skill ID.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "isArray": false,
+            "description": "<p>Skill record.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>true</code>.</p>"
+          }
+        ]
+      }
+    },
+    "filename": "api-docs.js",
+    "groupTitle": "Skills",
+    "error": {
+      "fields": {
+        "400": [
+          {
+            "group": "400",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>false</code>.</p>"
+          },
+          {
+            "group": "400",
+            "type": "Object",
+            "optional": false,
+            "field": "error",
+            "isArray": false,
+            "description": "<p>Error details.</p>"
+          },
+          {
+            "group": "400",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.code",
+            "isArray": false,
+            "description": "<p><code>VALIDATION_ERROR</code>.</p>"
+          },
+          {
+            "group": "400",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.message",
+            "isArray": false,
+            "description": "<p>Describes invalid input.</p>"
+          }
+        ],
+        "404": [
+          {
+            "group": "404",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>false</code>.</p>"
+          },
+          {
+            "group": "404",
+            "type": "Object",
+            "optional": false,
+            "field": "error",
+            "isArray": false,
+            "description": "<p>Error details.</p>"
+          },
+          {
+            "group": "404",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.code",
+            "isArray": false,
+            "description": "<p><code>RESOURCE_NOT_FOUND</code>.</p>"
+          },
+          {
+            "group": "404",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.message",
+            "isArray": false,
+            "description": "<p>Resource was not found.</p>"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "get",
+    "url": "/api/skills",
+    "title": "List skills",
+    "name": "ListSkills",
+    "group": "Skills",
+    "version": "1.0.0",
+    "query": [
+      {
+        "group": "Query",
+        "type": "Number",
+        "optional": true,
+        "field": "profileId",
+        "isArray": false,
+        "description": "<p>Filter by profile ID.</p>"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "data",
+            "isArray": true,
+            "description": "<p>Skill records with <code>id</code>, <code>profileId</code>, <code>name</code>, and <code>sortOrder</code>.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>true</code>.</p>"
+          }
+        ]
+      }
+    },
+    "filename": "api-docs.js",
+    "groupTitle": "Skills",
+    "error": {
+      "fields": {
+        "400": [
+          {
+            "group": "400",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>false</code>.</p>"
+          },
+          {
+            "group": "400",
+            "type": "Object",
+            "optional": false,
+            "field": "error",
+            "isArray": false,
+            "description": "<p>Error details.</p>"
+          },
+          {
+            "group": "400",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.code",
+            "isArray": false,
+            "description": "<p><code>VALIDATION_ERROR</code>.</p>"
+          },
+          {
+            "group": "400",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.message",
+            "isArray": false,
+            "description": "<p>Describes invalid input.</p>"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "put",
+    "url": "/api/skills/:id",
+    "title": "Update skill",
+    "name": "UpdateSkill",
+    "group": "Skills",
+    "version": "1.0.0",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "isArray": false,
+            "description": "<p>Skill ID.</p>"
+          }
+        ]
+      }
+    },
+    "body": [
+      {
+        "group": "Body",
+        "type": "Number",
+        "optional": false,
+        "field": "profileId",
+        "isArray": false,
+        "description": "<p>Parent profile ID.</p>"
+      },
+      {
+        "group": "Body",
+        "type": "String",
+        "optional": false,
+        "field": "name",
+        "isArray": false,
+        "description": "<p>Skill name.</p>"
+      },
+      {
+        "group": "Body",
+        "type": "Number",
+        "optional": true,
+        "field": "sortOrder",
+        "isArray": false,
+        "defaultValue": "0",
+        "description": "<p>Sort order.</p>"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "isArray": false,
+            "description": "<p>Updated skill.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>true</code>.</p>"
+          }
+        ]
+      }
+    },
+    "filename": "api-docs.js",
+    "groupTitle": "Skills",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "isArray": false,
+            "description": "<p>Bearer session token returned by <code>/api/auth/login</code>.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "400": [
+          {
+            "group": "400",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>false</code>.</p>"
+          },
+          {
+            "group": "400",
+            "type": "Object",
+            "optional": false,
+            "field": "error",
+            "isArray": false,
+            "description": "<p>Error details.</p>"
+          },
+          {
+            "group": "400",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.code",
+            "isArray": false,
+            "description": "<p><code>VALIDATION_ERROR</code>.</p>"
+          },
+          {
+            "group": "400",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.message",
+            "isArray": false,
+            "description": "<p>Describes invalid input.</p>"
+          }
+        ],
+        "404": [
+          {
+            "group": "404",
+            "type": "Boolean",
+            "optional": false,
+            "field": "success",
+            "isArray": false,
+            "description": "<p>Always <code>false</code>.</p>"
+          },
+          {
+            "group": "404",
+            "type": "Object",
+            "optional": false,
+            "field": "error",
+            "isArray": false,
+            "description": "<p>Error details.</p>"
+          },
+          {
+            "group": "404",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.code",
+            "isArray": false,
+            "description": "<p><code>RESOURCE_NOT_FOUND</code>.</p>"
+          },
+          {
+            "group": "404",
+            "type": "String",
+            "optional": false,
+            "parentNode": {
+              "path": "error",
+              "field": "error",
+              "type": "Object",
+              "isArray": false
+            },
+            "field": "error.message",
+            "isArray": false,
+            "description": "<p>Resource was not found.</p>"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "get",
+    "url": "/api/health",
+    "title": "Health check",
+    "name": "HealthCheck",
+    "group": "System",
+    "version": "1.0.0",
+    "success": {
+      "examples": [
+        {
+          "title": "Success:",
+          "content": "HTTP/1.1 200 OK\n{\"success\":true,\"data\":{\"status\":\"ok\"}}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "api-docs.js",
+    "groupTitle": "System"
+  }
+]

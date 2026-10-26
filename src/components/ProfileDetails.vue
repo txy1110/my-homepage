@@ -21,6 +21,7 @@
 </template>
 
 <script setup>
+// 资料展示组件只消费父级的用户信息，visible 可控制整块资料的显隐。
 defineProps({
   userInfo: { type: Object, required: true },
   visible: { type: Boolean, default: true }

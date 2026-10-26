@@ -36,6 +36,7 @@ import { useArticleStore } from '../stores/article.js'
 // 要求 2、3：公开文章列表从 Article Store 读取已发布文章，不再维护组件局部文章数据。
 const { publishedArticles } = storeToRefs(useArticleStore())
 const searchText = ref('')
+// 只在公开文章集合中按标题、摘要、正文或日期检索。
 const filteredArticles = computed(() => {
   const query = searchText.value.trim().toLocaleLowerCase()
   if (!query) return publishedArticles.value

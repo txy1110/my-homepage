@@ -20,12 +20,13 @@ import { storeToRefs } from 'pinia'
 import { RouterLink, useRoute } from 'vue-router'
 import { useUserStore } from '../stores/user.js'
 
-// 用 defineModel 接收父组件的 isDark，实现双向绑定
+// 主题开关状态由父级管理，避免导航组件与页面主题状态分离。
 const isDark = defineModel('isDark', { type: Boolean, default: false })
 const route = useRoute()
 // 以响应式 Store 状态决定“内容管理”入口跳转至登录页还是后台。
 const { isLoggedIn } = storeToRefs(useUserStore())
 const adminPath = computed(() => isLoggedIn.value ? '/admin/profile' : '/login')
+// 后台子页面统一高亮内容管理入口，其他页面按当前路由路径高亮。
 const activePath = computed(() => route.path.startsWith('/admin') ? '/admin/profile' : route.path)
 </script>
 

@@ -1,6 +1,6 @@
 <template>
   <section class="page-surface">
-    <header class="page-heading"><h1>个人资料</h1><p>修改后会立即更新公开主页，并保存在当前浏览器。</p></header>
+    <header class="page-heading"><h1>个人资料</h1><p>修改后会保存到数据库并更新公开主页。</p></header>
     <form @submit.prevent="save">
       <div class="form-grid">
         <div class="form-field"><label for="profile-name">姓名</label><input id="profile-name" v-model.trim="draft.name" required maxlength="40"></div>
@@ -17,6 +17,7 @@
         <button class="button" type="button" @click="resetDraft">取消修改</button>
       </div>
       <p v-if="saved" class="notice" role="status">资料已保存。</p>
+      <p v-if="error" class="form-error" role="alert">{{ error }}</p>
     </form>
   </section>
 </template>
@@ -31,18 +32,26 @@ const { userInfo, skills } = storeToRefs(projectStore)
 const draft = reactive({ ...userInfo.value })
 const skillsDraft = ref(skills.value.join(', '))
 const saved = ref(false)
+const error = ref('')
 
+// 放弃编辑时从 Store 重新拷贝当前值，恢复表单和技能输入框。
 function resetDraft() {
   Object.assign(draft, userInfo.value)
   skillsDraft.value = skills.value.join(', ')
   saved.value = false
 }
 
-function save() {
+// 前端先做必填检查，再将资料和技能一起提交给后端事务接口。
+async function save() {
   if (!draft.name || !draft.title || !draft.bio || !draft.email || !draft.city || !draft.job) return
   const skills = skillsDraft.value.split(',').map((skill) => skill.trim()).filter(Boolean)
   if (!skills.length) return
-  projectStore.updateProfile({ userInfo: draft, skills })
-  saved.value = true
+  error.value = ''
+  try {
+    await projectStore.updateProfile({ userInfo: draft, skills })
+    saved.value = true
+  } catch (cause) {
+    error.value = cause instanceof Error ? cause.message : '资料保存失败。'
+  }
 }
 </script>

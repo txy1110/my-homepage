@@ -40,7 +40,7 @@ const props = defineProps({
 // defineModel：与父组件双向绑定 filterText
 const filterText = defineModel('filterText', { type: String, default: '' })
 
-// 组件内部按关键词过滤
+// 空关键词展示完整列表，其余情况使用不区分大小写的包含匹配。
 const filteredSkills = computed(() => {
   if (!filterText.value.trim()) return props.skills
   const k = filterText.value.trim().toLowerCase()

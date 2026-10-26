@@ -10,7 +10,7 @@
 </template>
 
 <script setup>
-// defineModel 实现父子双向绑定
+// 主题状态由父级统一持有，defineModel 让此按钮可直接切换父级状态。
 const isDark = defineModel('isDark', { type: Boolean, default: false })
 </script>
 

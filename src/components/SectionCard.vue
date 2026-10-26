@@ -15,6 +15,7 @@
 </template>
 
 <script setup>
+// 通过具名插槽扩展标题区、默认插槽承载各类主页内容。
 defineProps({
   title: {
     type: String,

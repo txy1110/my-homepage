@@ -29,6 +29,7 @@ import { useProjectStore } from '../stores/project.js'
 
 const { projects } = storeToRefs(useProjectStore())
 const searchText = ref('')
+// 在客户端对数据库返回的项目字段做不区分大小写的即时筛选。
 const filteredProjects = computed(() => {
   const query = searchText.value.trim().toLocaleLowerCase()
   if (!query) return projects.value

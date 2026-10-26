@@ -83,10 +83,13 @@ import 'element-plus/theme-chalk/el-table.css'
 import 'element-plus/theme-chalk/el-table-column.css'
 import 'element-plus/theme-chalk/el-tag.css'
 import { useProjectStore } from '../stores/project.js'
+import { useArticleStore } from '../stores/article.js'
 
 const projectStore = useProjectStore()
+const articleStore = useArticleStore()
 // storeToRefs 解构后仍保留响应式；表单草稿独立于 Store，取消弹窗不会提前改动正式数据。
 const { projects, projectCount } = storeToRefs(projectStore)
+// 每次创建新项目都生成干净草稿，避免复用之前编辑过的字段。
 const blankProject = () => ({ id: '', name: '', description: '', status: '规划中', tech: '', period: '' })
 const draft = reactive(blankProject())
 const formRef = ref()
@@ -104,8 +107,10 @@ const rules = {
   period: [{ required: true, message: '请输入项目周期。', trigger: 'blur' }]
 }
 
+// 将业务状态映射到 Element Plus 的语义颜色标签。
 const statusTag = (status) => ({ '进行中': 'success', '已完成': 'info', '规划中': 'warning' }[status] || 'info')
 
+// 新建时重置草稿，避免沿用上一次编辑对话框的字段。
 function startNew() {
   isEditing.value = false
   Object.assign(draft, blankProject())
@@ -118,16 +123,17 @@ function editProject(project) {
   dialogVisible.value = true
 }
 
+// 表单通过校验后按新增或修改分支调用 Store 的持久化 action。
 function saveProject() {
   // 先通过 Element Plus 表单校验，再调用 Store action 更新并持久化数据。
-  formRef.value.validate((valid) => {
+  formRef.value.validate(async (valid) => {
     if (!valid) return
     try {
       if (isEditing.value) {
-        projectStore.updateProject(draft.id, { ...draft })
+        await projectStore.updateProject(draft.id, { ...draft })
         ElMessage.success('项目修改已保存。')
       } else {
-        projectStore.addProject({ ...draft })
+        await projectStore.addProject({ ...draft })
         ElMessage.success('项目已新增。')
       }
       dialogVisible.value = false
@@ -137,6 +143,7 @@ function saveProject() {
   })
 }
 
+// 二次确认后请求服务端删除，只有成功响应才由 Store 更新列表。
 async function removeProject(project) {
   try {
     // 删除前二次确认，确认后由 Store 负责修改状态和保存缓存。
@@ -145,7 +152,8 @@ async function removeProject(project) {
       cancelButtonText: '取消',
       type: 'warning'
     })
-    projectStore.deleteProject(project.id)
+    await projectStore.deleteProject(project.id)
+    await articleStore.loadAdmin()
     ElMessage.success('项目已删除。')
   } catch (cause) {
     if (cause === 'cancel' || cause === 'close') return
